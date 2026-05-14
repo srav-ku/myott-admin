@@ -123,13 +123,16 @@ function Inner({ tmdbId }: { tmdbId: number }) {
   const year =
     show.release_year ?? (Number(show.first_air_date?.slice(0, 4)) || null);
 
+  const sp = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+  const isFromDiscovery = sp?.get('from') === 'discovery';
+
   return (
     <div className="space-y-6 pb-20 max-w-5xl mx-auto">
       <Link
-        href="/admin"
+        href={isFromDiscovery ? '/admin?source=tmdb&tab=tv' : '/admin'}
         className="inline-flex items-center gap-1 text-sm text-text-dim hover:text-white transition-colors"
       >
-        <ChevronLeft size={16} /> Back to Library
+        <ChevronLeft size={16} /> Back to {isFromDiscovery ? 'Discovery' : 'Library'}
       </Link>
 
       <div className="bg-surface border border-border p-4 md:p-6 rounded-2xl">

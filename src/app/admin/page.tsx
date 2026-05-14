@@ -124,7 +124,8 @@ function ContentDashboard() {
       if (r.ok) {
         // Clear loading before pushing to allow immediate feedback
         setLoading(false);
-        router.push(`/admin/manage/${kind}/${tmdbId}`);
+        const fromParam = source === 'tmdb' ? '?from=discovery' : '';
+        router.push(`/admin/manage/${kind}/${tmdbId}${fromParam}`);
       } else {
         showAlert({ type: 'error', message: r.error || 'Failed to add to library' });
         setLoading(false);
@@ -257,7 +258,7 @@ function ContentDashboard() {
                     <div className="flex gap-2 w-full sm:w-auto">
                     {inDb ? (
                       <Link
-                        href={k === 'movie' ? `/admin/manage/movie/${r.tmdb_id}` : `/admin/manage/tv/${r.tmdb_id}`}
+                        href={k === 'movie' ? `/admin/manage/movie/${r.tmdb_id}${source === 'tmdb' ? '?from=discovery' : ''}` : `/admin/manage/tv/${r.tmdb_id}${source === 'tmdb' ? '?from=discovery' : ''}`}
                         className="flex-1 sm:flex-none text-center px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/5 text-white text-[10px] font-black uppercase tracking-widest rounded-lg transition-all"
                       >
                         Manage
