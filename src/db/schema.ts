@@ -375,6 +375,96 @@ export const watched = sqliteTable(
 );
 
 /* -------------------------------------------------------------------------- */
+/*                                     ADS                                    */
+/* -------------------------------------------------------------------------- */
+
+export const AD_POSITIONS = ['home_top', 'home_middle', 'player_bottom', 'reward_video'] as const;
+export type AdPosition = (typeof AD_POSITIONS)[number];
+
+export const AD_TYPES = ['banner', 'rewarded', 'native'] as const;
+export type AdType = (typeof AD_TYPES)[number];
+
+export const AD_PROVIDERS = ['custom', 'adsense', 'admob'] as const;
+export type AdProvider = (typeof AD_PROVIDERS)[number];
+
+export const ads = sqliteTable('ads', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  position: text('position', { enum: AD_POSITIONS }).notNull(),
+  type: text('type', { enum: AD_TYPES }).notNull(),
+  provider: text('provider', { enum: AD_PROVIDERS }).notNull(),
+  
+  imageUrl: text('image_url'),
+  redirectUrl: text('redirect_url'),
+  unitId: text('unit_id'), // For network-based ads
+  
+  isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
+  priority: integer('priority').notNull().default(0),
+  frequencyLimit: integer('frequency_limit').notNull().default(0), // 0 = unlimited
+
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+});
+
+export const AD_EVENT_TYPES = ['impression', 'click', 'reward_earned'] as const;
+
+export const adEvents = sqliteTable('ad_events', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  adId: integer('ad_id').references(() => ads.id, { onDelete: 'cascade' }),
+  userId: text('user_id').references(() => users.id, { onDelete: 'set null' }),
+  eventType: text('event_type', { enum: AD_EVENT_TYPES }).notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+});
+
+export const userAdState = sqliteTable('user_ad_state', {
+  userId: text('user_id').primaryKey().references(() => users.id, { onDelete: 'cascade' }),
+  lastRewardAt: integer('last_reward_at', { mode: 'timestamp' }),
+  impressionsToday: integer('impressions_today').notNull().default(0),
+  lastImpressionAt: integer('last_impression_at', { mode: 'timestamp' }),
+});
+
+/* -------------------------------------------------------------------------- */
+/*                               REPORTS & REQS                               */
+/* -------------------------------------------------------------------------- */
+
+export const REPORT_STATUS = ['open', 'resolved', 'ignored'] as const;
+
+export const reports = sqliteTable('reports', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  userId: text('user_id').references(() => users.id, { onDelete: 'set null' }),
+  contentType: text('content_type', { enum: ['movie', 'episode', 'tv'] }).notNull(),
+  contentId: integer('content_id').notNull(),
+  issueType: text('issue_type').notNull(),
+  message: text('message'),
+  status: text('status', { enum: REPORT_STATUS }).notNull().default('open'),
+  resolvedAt: integer('resolved_at', { mode: 'timestamp' }),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+});
+
+export const REQUEST_STATUS = ['pending', 'added', 'ignored'] as const;
+
+export const contentRequests = sqliteTable('content_requests', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  tmdbId: integer('tmdb_id').notNull(),
+  mediaType: text('media_type', { enum: ['movie', 'tv'] }).notNull(),
+  title: text('title').notNull(),
+  status: text('status', { enum: REQUEST_STATUS }).notNull().default('pending'),
+  count: integer('count').notNull().default(1),
+  lastRequestedAt: integer('last_requested_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+});
+
+/* -------------------------------------------------------------------------- */
+/*                                  UPDATES                                   */
+/* -------------------------------------------------------------------------- */
+
+export const updates = sqliteTable('updates', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  message: text('message').notNull(),
+  type: text('type').notNull().default('info'),
+  expiresAt: integer('expires_at', { mode: 'timestamp' }),
+  createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+});
+
+/* -------------------------------------------------------------------------- */
 /*                              SCHEMA EXPORTS                                */
 /* -------------------------------------------------------------------------- */
 
@@ -390,4 +480,10 @@ export const schema = {
   collections,
   collectionItems,
   watched,
+  ads,
+  adEvents,
+  userAdState,
+  reports,
+  contentRequests,
+  updates,
 };
