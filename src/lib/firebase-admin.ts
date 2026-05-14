@@ -18,7 +18,8 @@ if (!admin.apps.length) {
     admin.initializeApp({
       credential: admin.credential.cert(serviceAccount),
     });
-  } else {
+  } else if (process.env.NODE_ENV === 'production' && !process.env.VERCEL) {
+    // Only warn if we're in production and NOT building on Vercel
     console.warn('Firebase Admin Service Account not configured. Admin features requiring server-side Firebase will fail.');
   }
 }
