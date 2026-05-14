@@ -1,0 +1,11 @@
+node_modules
+.next
+.vercel
+.wrangler
+.env
+.env.local
+local.db
+local.db-journal
+local.db-wal
+local.db-shm
+*.tsbuildinfo

@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1777112617027,
+      "tag": "0000_sweet_northstar",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1777285632940,
+      "tag": "0001_sleepy_dragon_lord",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1777286482581,
+      "tag": "0002_loose_ben_urich",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1777308352833,
+      "tag": "0003_eager_barracuda",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1777370374256,
+      "tag": "0004_happy_inhumans",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1777395306635,
+      "tag": "0005_cheerful_the_hunter",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1777479039935,
+      "tag": "0006_puzzling_freak",
+      "breakpoints": true
+    }
+  ]
+}

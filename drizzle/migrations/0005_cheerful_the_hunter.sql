@@ -1,0 +1,1 @@
+ALTER TABLE `history` ADD `link_id` integer REFERENCES links(id);
