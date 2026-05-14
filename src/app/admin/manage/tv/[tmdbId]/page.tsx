@@ -48,7 +48,7 @@ function Inner({ tmdbId }: { tmdbId: number }) {
   const [err, setErr] = useState<string | null>(null);
   const [activeSeason, setActiveSeason] = useState<number | null>(null);
 
-  const [addingEpisode, setAddingEpisode] = useState(false);
+  const [addingEpisode, setAddingEpisode] = useState(true);
   const [bulkAdding, setBulkAdding] = useState(false);
   const [newEpSeason, setNewEpSeason] = useState(1);
   const [newEpNum, setNewEpNum] = useState(1);

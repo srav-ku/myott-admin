@@ -23,7 +23,7 @@ export function LinksManager({
   scope: { kind: 'movie'; movieId: number } | { kind: 'episode'; episodeId: number };
 }) {
   const [items, setItems] = useState<LinkRow[] | null>(null);
-  const [showAdd, setShowAdd] = useState(false);
+  const [showAdd, setShowAdd] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [availableLanguages, setAvailableLanguages] = useState<string[]>([]);
