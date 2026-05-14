@@ -53,14 +53,7 @@ export async function api<T = unknown>(
   init: RequestInit = {},
 ): Promise<ApiResult<T>> {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || '';
-  
-  // Routes that MUST stay local to the Admin Portal (Vercel)
-  const isLocal = path.startsWith('/api/admin') || 
-                  path.startsWith('/api/movies') || 
-                  path.startsWith('/api/tv') ||
-                  path.startsWith('/api/search');
-
-  const url = (path.startsWith('http') || !baseUrl || isLocal) ? path : `${baseUrl}${path}`;
+  const url = (path.startsWith('http') || !baseUrl) ? path : `${baseUrl}${path}`;
 
   const headers: Record<string, string> = {
     ...(init.body && !(init.body instanceof FormData)
