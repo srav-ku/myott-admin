@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+export const dynamic = 'force-dynamic';
 import './globals.css';
 import { AuthProvider } from '@/components/AuthProvider';
 import { AlertProvider } from '@/components/AlertModal';
