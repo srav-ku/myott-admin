@@ -39,8 +39,8 @@ export async function POST(
   const auth = await requireAdmin(req);
   if (!auth.ok) return auth.response;
   const { id: raw } = await ctx.params;
-  const episodeId = Number(raw);
-  if (!Number.isFinite(episodeId)) return fail('Invalid episodeId', 400);
+  const epId = Number(raw);
+  if (!Number.isFinite(epId)) return fail('Invalid episodeId', 400);
 
   const parsed = await parseJson(req, BulkSchema);
   if (!parsed.ok) return parsed.response;
@@ -56,7 +56,7 @@ export async function POST(
         // Delete if empty
         await db
           .delete(links)
-          .where(and(eq(links.episodeId, episodeId), eq(links.quality, quality)));
+          .where(and(eq(links.episodeId, epId), eq(links.quality, quality)));
         continue;
       }
 
@@ -66,7 +66,7 @@ export async function POST(
       const existing = await db
         .select()
         .from(links)
-        .where(and(eq(links.episodeId, episodeId), eq(links.quality, quality)))
+        .where(and(eq(links.episodeId, epId), eq(links.quality, quality)))
         .limit(1);
 
       if (existing.length > 0) {
@@ -74,7 +74,7 @@ export async function POST(
           .update(links)
           .set({
             url: item.url,
-            type: item.type,
+            type: (item.type ?? 'extract') as any,
             languages: langs,
             extractedUrl: null,
             expiresAt: null,
@@ -83,12 +83,12 @@ export async function POST(
           .where(eq(links.id, existing[0].id));
       } else {
         await db.insert(links).values({
-          episodeId,
-          quality,
+          episodeId: epId,
+          quality: quality as any,
           url: item.url,
-          type: item.type,
+          type: (item.type ?? 'extract') as any,
           languages: langs,
-        });
+        } as any);
       }
     }
 
@@ -109,14 +109,14 @@ export async function GET(
   const auth = await requireAdmin(req);
   if (!auth.ok) return auth.response;
   const { id: raw } = await ctx.params;
-  const episodeId = Number(raw);
+  const epId = Number(raw);
 
   try {
     const db = await getDb();
     const rows = await db
       .select()
       .from(links)
-      .where(eq(links.episodeId, episodeId));
+      .where(eq(links.episodeId, epId));
     return ok({ links: rows });
   } catch (err) {
     return serverError(err);
