@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState, use } from 'react';
+export const dynamic = 'force-dynamic';
 import Link from 'next/link';
 import { api } from '@/lib/api';
 import { useAlert } from '@/components/AlertModal';
