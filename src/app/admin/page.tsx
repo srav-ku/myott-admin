@@ -10,12 +10,13 @@ import BulkImport from '@/components/BulkImport';
 
 type Result = {
   id: number;
+  tmdb_id: number;
   local_id?: number;
   media_type: 'movie' | 'tv';
   title?: string;
   name?: string;
-  poster_path: string | null;
-  backdrop_path: string | null;
+  poster_url: string | null;
+  backdrop_url: string | null;
   release_date?: string;
   first_air_date?: string;
   vote_average?: number;
@@ -208,11 +209,11 @@ function ContentDashboard() {
               const k = r.media_type || tab;
               const title = r.title || r.name || '(untitled)';
               const inDb = r.in_db || source === 'local';
-              const poster = r.poster_path ? `https://image.tmdb.org/t/p/w500${r.poster_path}` : null;
+              const poster = r.poster_url;
               
               return (
                 <div
-                  key={`${k}-${r.id || idx}`}
+                  key={`${k}-${r.tmdb_id || idx}`}
                   className="group flex flex-col sm:flex-row sm:items-center gap-3 md:gap-4 bg-bg/50 border border-border rounded-xl p-3 hover:border-white/20 transition-all duration-300"
                 >
                   <div className="flex items-center gap-4 flex-1 min-w-0">
