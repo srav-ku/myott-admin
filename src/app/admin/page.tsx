@@ -96,7 +96,7 @@ function ContentDashboard() {
     if (r.ok) {
       showAlert({ type: 'success', message: 'Successfully added to Library!' });
       // Update UI to show it's in DB now
-      setResults(prev => prev.map(item => item.id === tmdbId ? { ...item, in_db: true } : item));
+      setResults(prev => prev.map(item => item.tmdb_id === tmdbId ? { ...item, in_db: true } : item));
     } else {
       showAlert({ type: 'error', message: r.error || 'Failed to add to library' });
     }
@@ -253,17 +253,17 @@ function ContentDashboard() {
                     </div>
                   </div>
 
-                  <div className="flex gap-2 w-full sm:w-auto">
+                    <div className="flex gap-2 w-full sm:w-auto">
                     {inDb ? (
                       <Link
-                        href={k === 'movie' ? `/admin/manage/movie/${r.id}` : `/admin/manage/tv/${r.id}`}
+                        href={k === 'movie' ? `/admin/manage/movie/${r.tmdb_id}` : `/admin/manage/tv/${r.tmdb_id}`}
                         className="flex-1 sm:flex-none text-center px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/5 text-white text-[10px] font-black uppercase tracking-widest rounded-lg transition-all"
                       >
                         Manage
                       </Link>
                     ) : (
                       <button
-                        onClick={() => void addAndManage(r.id, k as any)}
+                        onClick={() => void addAndManage(r.tmdb_id, k as any)}
                         className="flex-1 sm:flex-none px-4 py-2 bg-brand text-white text-[10px] font-black uppercase tracking-widest rounded-lg transition-all"
                       >
                         Add & Manage
